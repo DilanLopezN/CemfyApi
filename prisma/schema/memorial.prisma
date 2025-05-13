@@ -1,0 +1,21 @@
+model Homage {
+  id             Int       @id @default(autoincrement())
+  tributeFrom    String?
+  tributeMessage String?
+  imageUrl       String?
+  kinship        String?
+  memorialId     Int?
+  Memorial       Memorial? @relation(fields: [memorialId], references: [id])
+}
+
+model Memorial {
+  id                   Int       @id @default(autoincrement())
+  bornOn               DateTime
+  deceasedIin          DateTime
+  deceaseImageUrl      String
+  permissionToken      String?
+  createHomageQuantity Int?
+  deceasedId           String?   @unique
+  homages              Homage[]
+  deceased             Deceased? @relation(fields: [deceasedId], references: [id])
+}

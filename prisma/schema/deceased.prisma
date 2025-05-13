@@ -1,0 +1,92 @@
+model DeceasedDocuments {
+  id           String    @id @default(uuid())
+  documentLink String?
+  documentName String?
+  deceasedId   String?
+  Deceased     Deceased? @relation(fields: [deceasedId], references: [id])
+  createdAt    DateTime  @default(now())
+
+  @@index([documentLink])
+}
+
+model Deceased {
+  id                        String              @id @default(uuid())
+  registration              String?
+  fullName                  String
+  identificationDoc         String?
+  birthDay                  DateTime?
+  gender                    String?
+  race                      String?
+  maritalStatus             String?
+  nationality               String?
+  birthPlace                String?
+  nameMother                String?
+  nameFather                String?
+  profession                String?
+  religion                  String?
+  status                    String?
+  buriedIn                  DateTime?
+  deceasedIn                DateTime?
+  deathDate                 DateTime?
+  dateOfExhumation          DateTime?
+  deathCause                String?
+  crm                       String?
+  doctorName                String?
+  cerimonialDescription     String?
+  burialDescription         String?
+  registryOffice            String?
+  book                      String?
+  page                      String?
+  number                    String?
+  declaredBy                String?
+  declaredByAdress          String?
+  declaredByPhone           String?
+  concessionPeriod          Int?
+  typeOfGrave               String?
+  tombstone                 Boolean             @default(false)
+  flowerbed                 Boolean             @default(false)
+  identification            String?
+  sealNumber                String?
+  grave                     String?
+  sector                    String?
+  block                     String?
+  graveRegistration         String?
+  addObservation            Boolean             @default(false)
+  observations              String?
+  image                     String?
+  drawersId                 String?
+  drawer                    String?
+  assigneeId                Int?
+  cessionary                String?
+  transferDate              DateTime?
+  funeralHome               String?
+  vehiclePlate              String?
+  driverName                String?
+  relationship              String?
+  authorizeBurial           Boolean             @default(false)
+  authorizeBurialContractId String?
+  assignee                  Assignee?           @relation(fields: [assigneeId], references: [id])
+  Drawers                   Drawers?            @relation(fields: [drawersId], references: [id])
+  documents                 DeceasedDocuments[]
+  Exhumation                Exhumation[]
+  Funeral                   Funeral?
+  memorial                  Memorial?
+}
+
+enum DeceasedState {
+  EM_PREPARACAO
+  EM_VELORIO
+  EXUMADO
+  CREMADO
+  SEPULTADO
+  AGUARDANDO_SEPULTAMENTO
+  AGUARDANDO_CREMACAO
+  AGUARDANDO_EXUMACAO
+}
+
+enum GravesType {
+  JAZIGO
+  TUMBA
+  GAVETA
+  NICHO
+}

@@ -1,0 +1,43 @@
+model Drawers {
+  id                 String              @id @default(uuid())
+  valtsId            Int
+  status             DrawerStatus        @default(AVAILABLE)
+  coordenates        Json?
+  dimensions         Json?
+  identificator      String              @unique
+  sealId             String?             @unique @default(cuid())
+  image              String?
+  deceasedSupported  Int?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  saleValue          Decimal?
+  rentValue          Decimal?
+  owner              DrawerOwner?
+  assignee           Assignee?
+  deceades           Deceased[]
+  Valts              Valts               @relation(fields: [valtsId], references: [id])
+  history            DrawersHistory[]
+  Exhumation         Exhumation[]
+  SubscriptionUsedIn SubscriptionUsedIn?
+  ValtOwners         ValtOwners[]
+  drawerOwnerId      Int?
+}
+
+model DrawersHistory {
+  id                 Int       @id @default(autoincrement())
+  buriedDeceasedName String
+  buriedIn           DateTime
+  buriedId           String
+  drawerId           String
+  exhumedIn          DateTime?
+  identificator      String    @unique
+  drawersId          String?
+  Drawers            Drawers?  @relation(fields: [drawersId], references: [id])
+}
+
+enum DrawerStatus {
+  FULL
+  AVAILABLE
+  UNAVAILABLE
+  MAINTENANCE
+}

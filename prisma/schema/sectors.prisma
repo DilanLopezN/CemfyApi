@@ -1,0 +1,15 @@
+model SectorTags {
+  id        Int      @id @default(autoincrement())
+  tagName   String
+  tagHex    String
+  Sectors   Sectors? @relation(fields: [sectorsId], references: [id])
+  sectorsId String?
+}
+
+model Sectors {
+  id            String       @id @default(uuid())
+  identificator String       @unique
+  description   String
+  tags          SectorTags[]
+  Squares       Squares[]
+}

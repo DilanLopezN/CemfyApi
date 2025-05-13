@@ -1,0 +1,42 @@
+model GraveyardManagement {
+  id         Int          @id @default(autoincrement())
+  employees  Employees[]
+  graveyards Graveyards[]
+}
+
+model GraveyardServices {
+  id                 String              @id @default(uuid())
+  serviceName        String
+  serviceValue       Int?
+  isActive           Boolean?            @default(true)
+  serviceDuration    String?
+  needMaintenance    Boolean?            @default(false)
+  graveyardsId       String?
+  promotionId        String?
+  Graveyards         Graveyards?         @relation(fields: [graveyardsId], references: [id])
+  Promotion          Promotion?          @relation(fields: [promotionId], references: [id])
+  SubscriptionUsedIn SubscriptionUsedIn?
+}
+
+model Graveyards {
+  id                    String               @id @default(uuid())
+  nameGraveyards        String
+  nameEnterprise        String
+  cnpj                  String?              @unique
+  cep                   String
+  city                  String
+  street                String
+  state                 String
+  streetNumber          String
+  image                 String?
+  neighborhood          String?
+  isActive              Boolean?             @default(true)
+  partnerId             String
+  graveyardManagementId Int?
+  promotionId           String?
+  GraveyardServices     GraveyardServices[]
+  GraveyardManagement   GraveyardManagement? @relation(fields: [graveyardManagementId], references: [id])
+  Partner               Partner              @relation(fields: [partnerId], references: [id])
+  Promotion             Promotion?           @relation(fields: [promotionId], references: [id])
+  squares               Squares[]
+}

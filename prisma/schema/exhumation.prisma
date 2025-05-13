@@ -1,0 +1,26 @@
+model Exhumation {
+  id             Int              @id @default(autoincrement())
+  exhumationDate DateTime         @default(now())
+  description    String
+  reason         ExhumationReason
+  deceasedId     String
+  drawersId      String
+  performedAt    DateTime?
+  destination    String?
+  deceased       Deceased         @relation(fields: [deceasedId], references: [id])
+  drawerExhumed  Drawers          @relation(fields: [drawersId], references: [id])
+}
+
+enum ExhumationReason {
+  FAMILY_REQUEST
+  RELOCATION
+  CRIMINAL_INVESTIGATION
+  IDENTIFICATION
+  LEGAL_COMPLIANCE
+  TEMPORARY_BURIAL
+  CONSERVATION
+  CEMETERY_EXPANSION
+  ADMINISTRATIVE_ERROR
+  RELIGIOUS_OR_RITUAL
+  CELEBRATION_OF_LIFE
+}

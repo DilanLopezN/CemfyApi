@@ -1,0 +1,23 @@
+model Squares {
+  id            String        @id @default(uuid())
+  identificator String        @unique
+  image         String?
+  coordenates   Json?
+  dimensions    Json?
+  status        SquareStatus?
+  employeesId   Int?
+  graveyardsId  String
+  assignees     Assignee[]
+  responsible   Employees?    @relation(fields: [employeesId], references: [id])
+  Graveyards    Graveyards    @relation(fields: [graveyardsId], references: [id])
+  valts         Valts[]
+  Sectors       Sectors?      @relation(fields: [sectorsId], references: [id])
+  sectorsId     String?
+}
+
+enum SquareStatus {
+  FULL
+  AVAILABLE
+  UNAVAILABLE
+  MAINTENANCE
+}

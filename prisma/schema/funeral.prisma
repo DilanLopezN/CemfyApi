@@ -1,0 +1,25 @@
+model FuneralRooms {
+  id                Int               @id @default(autoincrement())
+  roomIdentificator String
+  occupancylimit    Int?
+  status            FuneralRoomStatus
+  funerals          Funeral[]
+}
+
+model Funeral {
+  id             Int           @id @default(autoincrement())
+  startDate      DateTime
+  endDate        DateTime
+  deceasedId     String        @unique
+  funeralRoomsId Int?
+  finished       Boolean?      @default(false)
+  deceased       Deceased      @relation(fields: [deceasedId], references: [id])
+  FuneralRooms   FuneralRooms? @relation(fields: [funeralRoomsId], references: [id])
+}
+
+enum FuneralRoomStatus {
+  EM_VELORIO
+  EM_PREPARACAO
+  EM_MANUTENCAO
+  LIVRE
+}

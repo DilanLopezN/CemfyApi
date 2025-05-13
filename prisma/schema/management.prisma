@@ -1,0 +1,23 @@
+model FinancialManagement {
+  id                          Int                 @id @default(autoincrement())
+  name                        String
+  description                 String?
+  interest_rate               Decimal?
+  penalty_rate                Decimal?
+  discount_rate               Decimal?
+  min_installments            Int?
+  max_installments            Int?
+  payment_deadline_days       Int?
+  status                      Boolean
+  minRentValue                Float?
+  requireApprovalMinRentValue Boolean?
+  discountAutonomySellers     Boolean?
+  activePlanId                Int?
+  activePlanDiscount          Decimal?
+  created_at                  DateTime            @default(now())
+  updated_at                  DateTime            @default(now())
+  allowed_payment_methods     MethodType[]
+  DelinquencyRecords          DelinquencyRecords?
+  paymentHistories            PaymentHistory[]
+  paymentsMethods             PaymentMethods[]
+}

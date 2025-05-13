@@ -1,0 +1,10 @@
+model Employees {
+  id                    Int                  @id @default(autoincrement())
+  createdAt             DateTime             @default(now())
+  permissions           PartnerPermissions[]
+  graveyardManagementId Int?
+  userId                Int
+  GraveyardManagement   GraveyardManagement? @relation(fields: [graveyardManagementId], references: [id])
+  user                  User                 @relation(fields: [userId], references: [id])
+  square                Squares[]
+}

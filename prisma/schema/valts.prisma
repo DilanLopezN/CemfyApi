@@ -1,0 +1,49 @@
+model ValtType {
+  id          Int        @id @default(autoincrement())
+  valtType    String
+  available   Boolean    @default(true)
+  rentValue   Int?
+  saleValue   Int?
+  promotionId String?
+  Promotion   Promotion? @relation(fields: [promotionId], references: [id])
+  Valts       Valts[]
+}
+
+model Valts {
+  id                  Int                 @id @default(autoincrement())
+  squaresId           String?
+  drawersQuantity     Int
+  identificator       String              @unique
+  coordenates         Json?
+  dimensions          Json?
+  drawersCoordenates  Json?
+  entryPaid           Boolean?            @default(false)
+  imageUrl            String?
+  imageUri            String?
+  image               String?
+  status              SquareStatus?
+  saleValue           Int?
+  rentValue           Int?
+  valtTypeId          Int?
+  sectorsId           String?
+  pendingSubscription Boolean             @default(false)
+  assignee            Assignee?           @relation(fields: [assigneeId], references: [id])
+  assigneeId          Int?                @unique
+  drawers             Drawers[]
+  SubscriptionUsedIn  SubscriptionUsedIn?
+  ValtMaintenance     ValtMaintenance?
+  owner               ValtOwners?
+  Squares             Squares?            @relation(fields: [squaresId], references: [id])
+  type                ValtType?           @relation(fields: [valtTypeId], references: [id])
+}
+
+model ValtMaintenance {
+  id                Int               @id @default(autoincrement())
+  chargeId          String?           @unique
+  choiceMaintenance MaintenanceChoice
+  isActive          Boolean
+  assigneeId        Int
+  valtsId           Int?              @unique
+  assignee          Assignee          @relation(fields: [assigneeId], references: [id])
+  valt              Valts?            @relation(fields: [valtsId], references: [id])
+}

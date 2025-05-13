@@ -1,0 +1,26 @@
+model PartnerUser {
+  id        Int      @id @default(autoincrement())
+  partnerId String
+  userId    Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Partner   Partner  @relation(fields: [partnerId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model Partner {
+  id          String               @id @default(uuid())
+  name        String
+  permissions PartnerPermissions[]
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  graveyards  Graveyards[]
+  PartnerUser PartnerUser[]
+}
+
+enum PartnerPermissions {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+}

@@ -1,0 +1,20 @@
+model DelinquencyRecords {
+  id                    Int                  @id @default(autoincrement())
+  assigneeId            Int?
+  financialManagementId Int?                 @unique
+  overdue_days          Int?
+  due_date              DateTime?
+  last_payment_date     DateTime?
+  outstanding_amount    Int?
+  status                DeliquencyStatus
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  assignee              Assignee?            @relation(fields: [assigneeId], references: [id])
+  financialManagement   FinancialManagement? @relation(fields: [financialManagementId], references: [id])
+}
+
+enum DeliquencyStatus {
+  ATIVO
+  RENEGOCIADO
+  RESOLVIDO
+}

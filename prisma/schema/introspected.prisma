@@ -1,0 +1,12 @@
+model PaymentOld {
+  id           Int       @id @default(autoincrement())
+  valuePayment Int?
+  paymentDate  DateTime?
+  dueDate      DateTime?
+  amountPaid   Int?
+  nDoc         String?
+  nInstallment Int?
+  status       String?
+  assigneeId   Int?
+  Assignee     Assignee? @relation(fields: [assigneeId], references: [id])
+}

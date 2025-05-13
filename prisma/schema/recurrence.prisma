@@ -1,0 +1,73 @@
+model RecurrencePlan {
+  id            String                    @id @default(uuid())
+  plan_id       Int                       @unique
+  plan_name     String?
+  type          PlanType
+  isActive      Boolean
+  subscriptions RecurrenceSubscriptions[]
+}
+
+model SubscriptionCharges {
+  id                        Int                      @id @default(autoincrement())
+  status                    String
+  chargeId                  Int
+  createdAt                 DateTime?
+  value                     Int?
+  receveidAt                String?
+  recurrenceSubscriptionsId String?
+  assigneeId                Int?
+  assignee                  Assignee?                @relation(fields: [assigneeId], references: [id])
+  RecurrenceSubscriptions   RecurrenceSubscriptions? @relation(fields: [recurrenceSubscriptionsId], references: [id])
+}
+
+model SubscriptionUsedIn {
+  id                      Int                      @id @default(autoincrement())
+  valtsId                 Int?                     @unique
+  graveyardServicesId     String?                  @unique
+  drawersId               String?                  @unique
+  RecurrenceSubscriptions RecurrenceSubscriptions?
+  drawerUsed              Drawers?                 @relation(fields: [drawersId], references: [id])
+  serviceUsed             GraveyardServices?       @relation(fields: [graveyardServicesId], references: [id])
+  valtUsed                Valts?                   @relation(fields: [valtsId], references: [id])
+}
+
+model RecurrenceSubscriptions {
+  id                    String                @id @default(uuid())
+  assigneeId            Int
+  paymentMethod         PaymentMethod
+  amountCharged         Int
+  tokenUsed             String?
+  subscriptionGatewayId String
+  subscriptionType      SubscriptionType
+  subscriptionUsedInId  Int?                  @unique
+  status                SubscriptionStatus
+  recurrencePlanId      String?
+  assignee              Assignee              @relation(fields: [assigneeId], references: [id])
+  RecurrencePlan        RecurrencePlan?       @relation(fields: [recurrencePlanId], references: [id])
+  subscriptionUse       SubscriptionUsedIn?   @relation(fields: [subscriptionUsedInId], references: [id])
+  charges               SubscriptionCharges[]
+}
+
+enum PlanType {
+  MENSAL
+  TRIMESTRAL
+  SEMESTRAL
+}
+
+enum PaymentMethod {
+  BOLIX
+  CREDIT
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+  CANCELED
+  OVERDUE
+}
+
+enum SubscriptionType {
+  RENT
+  MAINTENANCE
+  SALE
+}

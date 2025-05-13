@@ -1,0 +1,43 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  postgresql:
+    image: postgres:latest
+    container_name: oss-postgresql
+    restart: always
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: oss
+      POSTGRES_DB: oss
+
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"    # Porta padrão do RabbitMQ
+      - "15672:15672"  # Interface de gerenciamento web
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_log:/var/log/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin123
+ 
+
+  redis:
+    image: redis:latest
+    container_name: oss-redis
+    restart: always
+    ports:
+      - '6379:6379'
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+  rabbitmq_log:

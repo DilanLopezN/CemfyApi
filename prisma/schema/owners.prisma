@@ -1,0 +1,43 @@
+model ValtOwners {
+  id                 Int                 @id @default(autoincrement())
+  status             PaymentStatus
+  chargeId           String?             @unique
+  transactionType    TransactionsType
+  serviceType        ServiceType
+  amountInstallments Int?
+  amountValue        Int
+  entryValue         Int?
+  restAmount         Int?
+  restInstallments   Int?
+  paymentHistoryId   Int?
+  assigneeId         Int                 @unique
+  isActive           Boolean             @default(false)
+  paymentsGenerated  PaymentsGenerated[]
+  assignee           Assignee            @relation(fields: [assigneeId], references: [id])
+  payment            PaymentHistory?     @relation(fields: [paymentHistoryId], references: [id])
+  valtsId            Int?                @unique
+  valt               Valts?              @relation(fields: [valtsId], references: [id])
+  drawers            Drawers?            @relation(fields: [drawersId], references: [id])
+  drawersId          String?
+}
+
+model DrawerOwner {
+  id                 Int                 @id @default(autoincrement())
+  status             PaymentStatus
+  chargeId           String?             @unique
+  transactionType    TransactionsType
+  serviceType        ServiceType
+  amountInstallments Int?
+  amountValue        Int
+  entryValue         Int?
+  restAmount         Int?
+  restInstallments   Int?
+  paymentHistoryId   Int?
+  assigneeId         Int                 @unique
+  paymentsGenerated  PaymentsGenerated[]
+  isActive           Boolean             @default(false)
+  drawers            Drawers?            @relation(fields: [drawersId], references: [id])
+  drawersId          String?             @unique
+  payment            PaymentHistory?     @relation(fields: [paymentHistoryId], references: [id])
+  Assignee           Assignee            @relation(fields: [assigneeId], references: [id])
+}

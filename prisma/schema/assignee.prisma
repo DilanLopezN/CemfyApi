@@ -1,0 +1,203 @@
+model address {
+  id            Int       @id @default(autoincrement())
+  address_name  String?
+  city          String?
+  state         String?
+  zipcode       String?
+  adress_number String?
+  neighborhood  String?
+  assignees     Assignee?
+}
+
+enum IdentityType {
+  RG
+  CPF
+  CNH
+}
+
+model Responsibles {
+  id              Int          @id @default(autoincrement())
+  fullName        String
+  phoneNumber     String
+  identityNumber  String?
+  identityType    IdentityType
+  ownershipNumber Int
+  relationship    Relationship
+  Assignee        Assignee?    @relation(fields: [assigneeId], references: [id])
+  assigneeId      Int?
+}
+
+model business {
+  id                    Int       @id @default(autoincrement())
+  enterprise            String?
+  businessPosition      String?
+  businessPhone         String?
+  businessEmail         String?
+  businessAddress       String?
+  businessCity          String?
+  businessState         String?
+  businessZipcode       String?
+  businessAddressNumber String?
+  assignees             Assignee?
+}
+
+model payment {
+  id                Int       @id @default(autoincrement())
+  transactionType   String?
+  payType           String?
+  payInstallments   Int?
+  paymentDate       DateTime?
+  discount          Float?
+  dueDate           String?
+  dueDay            String?
+  status            Boolean?
+  maintenanceValue  Float?
+  maintenancePeriod String?
+  url               String?
+  typeContract      String?
+  assinado          Boolean?
+  assignees         Assignee?
+}
+
+enum AssigneTags {
+  OLD
+  NEW
+  OFF
+}
+
+model AssigneeSlugs {
+  id        Int        @id @default(autoincrement())
+  slugName  String
+  slugHex   String
+  createdAt DateTime   @default(now())
+  Assignee  Assignee[]
+}
+
+enum ServiceHistoryType {
+  VISITA_CEMITERIO
+  VISITA_FALECIDO
+  AGENDAMENTO
+  RETORNO_AGENDAMENTO
+}
+
+enum ScheduleStatus {
+  AGENDADO
+  RETORNO
+  FINALIZADO
+}
+
+model AssigneeSchedule {
+  id                Int              @id @default(autoincrement())
+  scheduleDate      DateTime
+  schedulingReason  String
+  status            ScheduleStatus
+  createdAt         DateTime         @default(now())
+  AssigneeHistory   AssigneeHistory? @relation(fields: [assigneeHistoryId], references: [id])
+  assigneeHistoryId Int?
+}
+
+model AssigneeHistory {
+  id           Int                @id @default(autoincrement())
+  observations String?
+  serviceType  ServiceHistoryType
+  schedulings  AssigneeSchedule[]
+  createdAt    DateTime           @default(now())
+  Assignee     Assignee?          @relation(fields: [assigneeId], references: [id])
+  assigneeId   Int?
+}
+
+model Assignee {
+  id                      Int                       @id @default(autoincrement())
+  birthdate               DateTime?
+  tag                     AssigneTags               @default(OLD)
+  slugs                   AssigneeSlugs?            @relation(fields: [assigneeSlugsId], references: [id])
+  name                    String?
+  cpf                     String?
+  rg                      String?
+  phone                   String?
+  email                   String?
+  maritalStatus           MaritalStatus?
+  nationality             String?
+  saleValue               Float?
+  rentValue               Float?
+  squaresId               String?
+  valtsId                 Int?
+  drawersId               String?                   @unique
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  addressId               Int?                      @unique
+  businessId              Int?                      @unique
+  paymentId               Int?                      @unique
+  relationshipId          Int?                      @unique
+  status                  Boolean?
+  registration            Int?                      @unique
+  maintenancePeriod       String?
+  maintenanceValue        Float?
+  address                 address?                  @relation(fields: [addressId], references: [id])
+  business                business?                 @relation(fields: [businessId], references: [id])
+  Drawers                 Drawers?                  @relation(fields: [drawersId], references: [id])
+  payment                 payment?                  @relation(fields: [paymentId], references: [id])
+  Squares                 Squares?                  @relation(fields: [squaresId], references: [id])
+  responsibles            Responsibles[]
+  Valts                   Valts[]
+  Deceased                Deceased[]
+  DelinquencyRecords      DelinquencyRecords[]
+  Documents               Documents[]
+  servicesHistory         AssigneeHistory[]
+  LocalPayment            LocalPayment[]
+  PaymentHistory          PaymentHistory[]
+  PaymentOld              PaymentOld[]
+  RecurrenceSubscriptions RecurrenceSubscriptions[]
+  SubscriptionCharges     SubscriptionCharges[]
+  ValtMaintenance         ValtMaintenance[]
+  ValtOwners              ValtOwners[]
+  DrawerOwners            DrawerOwner[]
+  assigneeSlugsId         Int?
+}
+
+model Documents {
+  id             Int       @id @default(autoincrement())
+  documentUuid   String?   @unique
+  documentStatus String?
+  assigneeId     Int?
+  type           String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  Assignee       Assignee? @relation(fields: [assigneeId], references: [id])
+}
+
+enum Relationship {
+  parent
+  sibling
+  spouse
+  child
+  other
+}
+
+enum MaritalStatus {
+  SOLTEIRO
+  CASADO
+  DIVORCIADO
+  VIUVO
+  OUTROS
+}
+
+enum transactionType {
+  SALE
+  RENT
+}
+
+enum payType {
+  CASH
+  INSTALLMENTS
+}
+
+enum Religions {
+  CRISTIANISMO
+  ISLAMISMO
+  HINDUISMO
+  BUDISMO
+  JUDAISMO
+  AGNOTICISMO
+  ATEISMO
+}
